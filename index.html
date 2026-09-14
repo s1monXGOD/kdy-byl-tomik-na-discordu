@@ -274,9 +274,10 @@
     // Aplikace vzhledu
     applyStreakTheme(streak);
 
-    // Dnes (14. 9. 2026)
-    const todayStr = "2026-09-14";
-    document.getElementById("todayDate").innerText = todayStr;
+    // Automatické zjištění dnešního data podle zařízení
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    document.getElementById("todayDate").innerText = `${now.getDate()}. ${now.getMonth() + 1}. ${now.getFullYear()}`;
     const todayLog = logsMap.get(todayStr);
     const badge = document.getElementById("todayStatusBadge");
 
