@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="cs" class="bg-[#080b11]">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080b11" id="metaThemeColor" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Kdy byl Tomík připojený na Discordu?</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -29,9 +31,15 @@
     }
   </script>
   <style>
+    html, body {
+      min-height: 100vh;
+      background-color: #080b11;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
     body {
       transition: background 0.7s ease, color 0.5s ease;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom));
     }
     .custom-scroll::-webkit-scrollbar {
       height: 6px;
@@ -46,10 +54,10 @@
     }
   </style>
 </head>
-<body id="pageBody" class="text-slate-200 min-h-screen pb-16 bg-[#0a0d14]">
+<body id="pageBody" class="text-slate-200">
 
   <!-- Header -->
-  <header class="text-center pt-10 pb-6 px-4 transition-all duration-700">
+  <header class="text-center pt-8 pb-5 px-4 transition-all duration-700">
     <span id="headerBadge" class="text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border transition-all duration-500">
       Discord Presence Intel™
     </span>
@@ -78,13 +86,13 @@
 
     <!-- Statistiky -->
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
+      <div id="statBox1" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">🎧</span>
         <p id="statTotalOnline" class="text-xl sm:text-2xl font-black text-emerald-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">dní online</p>
       </div>
 
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
+      <div id="statBox2" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">👻</span>
         <p id="statTotalOffline" class="text-xl sm:text-2xl font-black text-rose-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">dní offline</p>
@@ -98,7 +106,7 @@
         <p id="streakRank" class="text-[10px] font-bold mt-1 uppercase tracking-wider text-slate-500">–</p>
       </div>
 
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
+      <div id="statBox3" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">📊</span>
         <p id="statRatio" class="text-xl sm:text-2xl font-black text-indigo-400 mt-1">0 %</p>
         <p class="text-[11px] text-slate-400">účast</p>
@@ -162,7 +170,7 @@
     document.getElementById("statTotalOffline").innerText = totalOffline;
     document.getElementById("statRatio").innerText = `${ratio} %`;
 
-    // Výpočet reálné série od posledního dne
+    // Výpočet reálné série od konce
     let streak = 0;
     for (let i = logs.length - 1; i >= 0; i--) {
       if (logs[i].online) streak++;
@@ -170,10 +178,12 @@
     }
 
     // ========================================================
-    // GLOBÁLNÍ VZHLED PODLE DÉLKY SÉRIE
+    // GLOBÁLNÍ VZHLED + ZMĚNA BARVY PRO SAFARI / MOBILY
     // ========================================================
     function applyStreakTheme(streak) {
+      const html = document.documentElement;
       const body = document.getElementById("pageBody");
+      const metaTheme = document.getElementById("metaThemeColor");
       const badge = document.getElementById("headerBadge");
       const title = document.getElementById("mainTitle");
       const sub = document.getElementById("subTitle");
@@ -186,7 +196,6 @@
       const calendarCard = document.getElementById("calendarCard");
       const todayCard = document.getElementById("todayCard");
 
-      // Reset tříd
       streakCard.className = "border rounded-xl p-3.5 text-center transition-all duration-500";
       streakIcon.className = "text-xl inline-block transition-transform";
       title.className = "text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight transition-all duration-500";
@@ -194,7 +203,10 @@
       streakVal.innerText = streak;
 
       if (streak === 0) {
+        html.style.backgroundColor = "#080b11";
         body.style.background = "radial-gradient(ellipse at top, #0f172a 0%, #080b11 100%)";
+        if (metaTheme) metaTheme.setAttribute("content", "#0f172a");
+
         badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-cyan-950/40 text-cyan-400 border-cyan-800/40";
         title.className += " text-slate-300";
         sub.innerText = "Stav klinické smrti. Tomík je nezvěstný.";
@@ -209,7 +221,10 @@
         todayCard.style.borderColor = "#1e293b";
 
       } else if (streak === 1) {
+        html.style.backgroundColor = "#090c12";
         body.style.background = "radial-gradient(ellipse at top, #0d1620 0%, #090c12 100%)";
+        if (metaTheme) metaTheme.setAttribute("content", "#0d1620");
+
         badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-emerald-950/40 text-emerald-400 border-emerald-800/40";
         title.className += " text-white";
         sub.innerText = "Zázraky se dějí, ale zítra už nepřijde.";
@@ -224,7 +239,10 @@
         todayCard.style.borderColor = "#262b3d";
 
       } else if (streak === 2) {
+        html.style.backgroundColor = "#0d0f14";
         body.style.background = "radial-gradient(ellipse at top, #1e1b0d 0%, #0d0f14 100%)";
+        if (metaTheme) metaTheme.setAttribute("content", "#1e1b0d");
+
         badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-amber-950/60 text-amber-300 border-amber-600/50";
         title.className += " text-amber-100";
         sub.innerText = "Něco je špatně... Dva dny po sobě?";
@@ -239,7 +257,10 @@
         todayCard.style.borderColor = "rgba(245, 158, 11, 0.25)";
 
       } else if (streak >= 3 && streak < 5) {
+        html.style.backgroundColor = "#0d090d";
         body.style.background = "radial-gradient(ellipse at top, #291207 0%, #0d090d 100%)";
+        if (metaTheme) metaTheme.setAttribute("content", "#291207");
+
         badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-orange-950 text-orange-400 border-orange-500";
         title.className += " text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400";
         sub.innerText = "Tady něco nehraje. Buď dostal kopačky, nebo marodí.";
@@ -255,7 +276,10 @@
         todayCard.style.borderColor = "rgba(249, 115, 22, 0.4)";
 
       } else {
+        html.style.backgroundColor = "#100404";
         body.style.background = "radial-gradient(ellipse at top, #3b0a0a 0%, #100404 100%)";
+        if (metaTheme) metaTheme.setAttribute("content", "#3b0a0a");
+
         badge.className = "text-[11px] uppercase tracking-widest font-black px-3.5 py-1 rounded-full border bg-red-900 text-red-100 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.7)] animate-pulse";
         title.className += " text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-300 to-amber-200 drop-shadow-[0_4px_10px_rgba(239,68,68,0.5)]";
         sub.innerText = "⚠️ KRITICKÝ STAV: Realita byla opuštěna, Tomík je permanentně online.";
@@ -271,10 +295,9 @@
       }
     }
 
-    // Aplikace vzhledu
     applyStreakTheme(streak);
 
-    // Automatické zjištění dnešního data podle zařízení
+    // Automatický dnešek podle hodin
     const now = new Date();
     const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     document.getElementById("todayDate").innerText = `${now.getDate()}. ${now.getMonth() + 1}. ${now.getFullYear()}`;
