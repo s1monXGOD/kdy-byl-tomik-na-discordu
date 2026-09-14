@@ -14,6 +14,15 @@
             darkbg: '#0f1117',
             cardbg: '#181b26',
             cardborder: '#262b3d',
+          },
+          keyframes: {
+            fireglow: {
+              '0%, 100%': { boxShadow: '0 0 15px rgba(249, 115, 22, 0.4), inset 0 0 10px rgba(249, 115, 22, 0.2)' },
+              '50%': { boxShadow: '0 0 25px rgba(239, 68, 68, 0.7), inset 0 0 15px rgba(239, 68, 68, 0.3)' },
+            }
+          },
+          animation: {
+            'fire-glow': 'fireglow 2s infinite ease-in-out',
           }
         }
       }
@@ -24,7 +33,6 @@
       background-color: #0d0f15;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    /* Hezký tmavý scrollbar pro mobil i desktop */
     .custom-scroll::-webkit-scrollbar {
       height: 6px;
     }
@@ -82,10 +90,12 @@
         <p class="text-[11px] text-slate-400">dní offline</p>
       </div>
 
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center">
-        <span class="text-xl">🔥</span>
+      <!-- KARTA SÉRIE -->
+      <div id="streakCard" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-300">
+        <span id="streakIcon" class="text-xl inline-block transition-transform">🔥</span>
         <p id="statStreak" class="text-xl sm:text-2xl font-black text-indigo-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">série v řadě</p>
+        <p id="streakRank" class="text-[10px] font-bold mt-1 uppercase tracking-wider text-slate-500">–</p>
       </div>
 
       <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center">
@@ -117,23 +127,11 @@
 
       <!-- SCROLLOVACÍ KONTEJNER -->
       <div class="overflow-x-auto custom-scroll pb-3">
-        <!-- Vnitřní kontejner s minimální šířkou 720px -->
         <div class="min-w-[720px]">
-          <!-- Dny v týdnu hlavička -->
           <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">
-            <div>Po</div>
-            <div>Út</div>
-            <div>St</div>
-            <div>Čt</div>
-            <div>Pá</div>
-            <div>So</div>
-            <div>Ne</div>
+            <div>Po</div><div>Út</div><div>St</div><div>Čt</div><div>Pá</div><div>So</div><div>Ne</div>
           </div>
-
-          <!-- Mřížka kalendáře -->
-          <div id="calendarGrid" class="grid grid-cols-7 gap-2">
-            <!-- Generuje JavaScript -->
-          </div>
+          <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
         </div>
       </div>
     </section>
@@ -144,8 +142,10 @@
     Tomáš Pavel Bohata Presence Tracking Engine™ · Žádné data nejsou v bezpečí
   </footer>
 
-  <!-- SCRIPT -->
   <script>
+    // ==========================================
+    // DATA
+    // ==========================================
     const logs = [
       { date: "2026-09-12", online: true, note: "Na 10 minut po florbale, pak šel spát" },
       { date: "2026-09-13", online: true, note: "Koukal na Barcu, takže vlastně nebyl" },
@@ -163,6 +163,7 @@
     document.getElementById("statTotalOffline").innerText = totalOffline;
     document.getElementById("statRatio").innerText = `${ratio} %`;
 
+    // 1. VÝPOČET SÉRIE (STREAK)
     let streak = 0;
     for (let i = logs.length - 1; i >= 0; i--) {
       if (logs[i].online) streak++;
@@ -170,7 +171,44 @@
     }
     document.getElementById("statStreak").innerText = streak;
 
-    // Dnes (14. 9. 2026)
+    // 2. DYNAMICKÉ RANKY A IKONY PODLE SÉRIE
+    const streakCard = document.getElementById("streakCard");
+    const streakIcon = document.getElementById("streakIcon");
+    const streakVal = document.getElementById("statStreak");
+    const streakRank = document.getElementById("streakRank");
+
+    if (streak === 0) {
+      streakIcon.innerText = "❄️";
+      streakVal.className = "text-xl sm:text-2xl font-black text-cyan-400 mt-1";
+      streakRank.innerText = "Žádná série - Klasika";
+      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-cyan-400/80";
+    } else if (streak === 1) {
+      streakIcon.innerText = "🙄";
+      streakVal.className = "text-xl sm:text-2xl font-black text-emerald-400 mt-1";
+      streakRank.innerText = "Náhoda (1 den)";
+      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-emerald-500";
+    } else if (streak === 2) {
+      streakIcon.innerText = "⚡";
+      streakVal.className = "text-xl sm:text-2xl font-black text-amber-400 mt-1";
+      streakRank.innerText = "Rozjezd (2 dny)";
+      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-amber-400";
+      streakCard.className += " border-amber-500/40 bg-amber-950/20";
+    } else if (streak >= 3 && streak < 5) {
+      streakIcon.innerText = "🔥";
+      streakIcon.className += " animate-bounce";
+      streakVal.className = "text-xl sm:text-2xl font-black text-orange-400 mt-1";
+      streakRank.innerText = `On Fire (${streak} dny!)`;
+      streakRank.className = "text-[10px] font-extrabold mt-1 uppercase tracking-wider text-orange-400";
+      streakCard.className += " border-orange-500/50 bg-orange-950/20";
+    } else {
+      streakIcon.innerText = "👑🔥";
+      streakVal.className = "text-xl sm:text-2xl font-black text-red-400 mt-1";
+      streakRank.innerText = `DISCORD ZÁVISLÁK (${streak} DNÍ!)`;
+      streakRank.className = "text-[10px] font-black mt-1 uppercase tracking-wider text-red-400 animate-pulse";
+      streakCard.className += " border-red-500/80 bg-red-950/30 animate-fire-glow";
+    }
+
+    // Dnes
     const todayStr = "2026-09-14";
     document.getElementById("todayDate").innerText = todayStr;
     const todayLog = logsMap.get(todayStr);
@@ -192,12 +230,10 @@
     // Kalendář
     const calendarGrid = document.getElementById("calendarGrid");
     
-    // Prázdná buňka na pondělí
     const empty = document.createElement("div");
     empty.className = "min-h-[92px] rounded-xl bg-slate-900/30 border border-transparent";
     calendarGrid.appendChild(empty);
 
-    // 30 dní v měsíci
     for (let day = 1; day <= 30; day++) {
       const dayFormatted = String(day).padStart(2, '0');
       const dateStr = `2026-09-${dayFormatted}`;
