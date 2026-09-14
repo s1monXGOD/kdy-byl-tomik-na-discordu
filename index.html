@@ -17,8 +17,8 @@
           },
           keyframes: {
             fireglow: {
-              '0%, 100%': { boxShadow: '0 0 15px rgba(249, 115, 22, 0.4), inset 0 0 10px rgba(249, 115, 22, 0.2)' },
-              '50%': { boxShadow: '0 0 25px rgba(239, 68, 68, 0.7), inset 0 0 15px rgba(239, 68, 68, 0.3)' },
+              '0%, 100%': { boxShadow: '0 0 25px rgba(239, 68, 68, 0.4), inset 0 0 15px rgba(239, 68, 68, 0.2)' },
+              '50%': { boxShadow: '0 0 45px rgba(249, 115, 22, 0.8), inset 0 0 25px rgba(249, 115, 22, 0.4)' },
             }
           },
           animation: {
@@ -30,33 +30,33 @@
   </script>
   <style>
     body {
-      background-color: #0d0f15;
+      transition: background 0.7s ease, color 0.5s ease;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .custom-scroll::-webkit-scrollbar {
       height: 6px;
     }
     .custom-scroll::-webkit-scrollbar-track {
-      background: #11141d;
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
     }
     .custom-scroll::-webkit-scrollbar-thumb {
-      background: #2b3247;
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 4px;
     }
   </style>
 </head>
-<body class="text-slate-200 min-h-screen pb-16">
+<body id="pageBody" class="text-slate-200 min-h-screen pb-16 bg-[#0a0d14]">
 
   <!-- Header -->
-  <header class="text-center pt-10 pb-6 px-4">
-    <span class="text-[11px] uppercase tracking-widest text-indigo-400 font-semibold bg-indigo-950/60 px-3 py-1 rounded-full border border-indigo-800/40">
+  <header class="text-center pt-10 pb-6 px-4 transition-all duration-700">
+    <span id="headerBadge" class="text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border transition-all duration-500">
       Discord Presence Intel™
     </span>
-    <h1 class="text-2xl sm:text-4xl font-extrabold text-white mt-3 tracking-tight">
+    <h1 id="mainTitle" class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight transition-all duration-500 text-white">
       Kdy byl Tomík připojený na Discordu?
     </h1>
-    <p class="text-slate-400 text-xs sm:text-sm mt-1">
+    <p id="subTitle" class="text-slate-400 text-xs sm:text-sm mt-1 transition-colors duration-500">
       Oficiální monitoring docházky a odůvodnění neúčasti.
     </p>
   </header>
@@ -64,7 +64,7 @@
   <main class="max-w-4xl mx-auto px-3 sm:px-4 space-y-6">
 
     <!-- Dnešní stav -->
-    <section class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-xl">
+    <section id="todayCard" class="bg-cardbg border border-cardborder rounded-2xl p-5 shadow-xl transition-all duration-500">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Aktuální stav</p>
@@ -78,27 +78,27 @@
 
     <!-- Statistiky -->
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center">
+      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">🎧</span>
         <p id="statTotalOnline" class="text-xl sm:text-2xl font-black text-emerald-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">dní online</p>
       </div>
 
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center">
+      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">👻</span>
         <p id="statTotalOffline" class="text-xl sm:text-2xl font-black text-rose-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">dní offline</p>
       </div>
 
       <!-- KARTA SÉRIE -->
-      <div id="streakCard" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-300">
+      <div id="streakCard" class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500 shadow-lg">
         <span id="streakIcon" class="text-xl inline-block transition-transform">🔥</span>
         <p id="statStreak" class="text-xl sm:text-2xl font-black text-indigo-400 mt-1">0</p>
         <p class="text-[11px] text-slate-400">série v řadě</p>
         <p id="streakRank" class="text-[10px] font-bold mt-1 uppercase tracking-wider text-slate-500">–</p>
       </div>
 
-      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center">
+      <div class="bg-cardbg border border-cardborder rounded-xl p-3.5 text-center transition-all duration-500">
         <span class="text-xl">📊</span>
         <p id="statRatio" class="text-xl sm:text-2xl font-black text-indigo-400 mt-1">0 %</p>
         <p class="text-[11px] text-slate-400">účast</p>
@@ -106,7 +106,7 @@
     </section>
 
     <!-- Kalendář -->
-    <section class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-6 shadow-xl overflow-hidden">
+    <section id="calendarCard" class="bg-cardbg border border-cardborder rounded-2xl p-4 sm:p-6 shadow-xl overflow-hidden transition-all duration-500">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-cardborder">
         <div>
           <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Archiv docházky</p>
@@ -118,9 +118,8 @@
         </div>
       </div>
 
-      <!-- Nápověda scrollování pro mobily -->
       <div class="sm:hidden text-center mb-2">
-        <span class="text-[10px] font-medium text-slate-500 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-800">
+        <span class="text-[10px] font-medium text-slate-400 bg-slate-900/60 px-2.5 py-1 rounded-full border border-slate-800">
           ← Posouvej kalendář prstem do stran →
         </span>
       </div>
@@ -143,9 +142,9 @@
   </footer>
 
   <script>
-    // ==========================================
-    // DATA
-    // ==========================================
+    // ========================================================
+    // TADY PŘIDÁVEJ NOVÉ DNY:
+    // ========================================================
     const logs = [
       { date: "2026-09-12", online: true, note: "Na 10 minut po florbale, pak šel spát" },
       { date: "2026-09-13", online: true, note: "Koukal na Barcu, takže vlastně nebyl" },
@@ -163,52 +162,119 @@
     document.getElementById("statTotalOffline").innerText = totalOffline;
     document.getElementById("statRatio").innerText = `${ratio} %`;
 
-    // 1. VÝPOČET SÉRIE (STREAK)
+    // Výpočet reálné série od posledního dne
     let streak = 0;
     for (let i = logs.length - 1; i >= 0; i--) {
       if (logs[i].online) streak++;
       else break;
     }
-    document.getElementById("statStreak").innerText = streak;
 
-    // 2. DYNAMICKÉ RANKY A IKONY PODLE SÉRIE
-    const streakCard = document.getElementById("streakCard");
-    const streakIcon = document.getElementById("streakIcon");
-    const streakVal = document.getElementById("statStreak");
-    const streakRank = document.getElementById("streakRank");
+    // ========================================================
+    // GLOBÁLNÍ VZHLED PODLE DÉLKY SÉRIE
+    // ========================================================
+    function applyStreakTheme(streak) {
+      const body = document.getElementById("pageBody");
+      const badge = document.getElementById("headerBadge");
+      const title = document.getElementById("mainTitle");
+      const sub = document.getElementById("subTitle");
 
-    if (streak === 0) {
-      streakIcon.innerText = "❄️";
-      streakVal.className = "text-xl sm:text-2xl font-black text-cyan-400 mt-1";
-      streakRank.innerText = "Žádná série - Klasika";
-      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-cyan-400/80";
-    } else if (streak === 1) {
-      streakIcon.innerText = "🙄";
-      streakVal.className = "text-xl sm:text-2xl font-black text-emerald-400 mt-1";
-      streakRank.innerText = "Náhoda (1 den)";
-      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-emerald-500";
-    } else if (streak === 2) {
-      streakIcon.innerText = "⚡";
-      streakVal.className = "text-xl sm:text-2xl font-black text-amber-400 mt-1";
-      streakRank.innerText = "Rozjezd (2 dny)";
-      streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-amber-400";
-      streakCard.className += " border-amber-500/40 bg-amber-950/20";
-    } else if (streak >= 3 && streak < 5) {
-      streakIcon.innerText = "🔥";
-      streakIcon.className += " animate-bounce";
-      streakVal.className = "text-xl sm:text-2xl font-black text-orange-400 mt-1";
-      streakRank.innerText = `On Fire (${streak} dny!)`;
-      streakRank.className = "text-[10px] font-extrabold mt-1 uppercase tracking-wider text-orange-400";
-      streakCard.className += " border-orange-500/50 bg-orange-950/20";
-    } else {
-      streakIcon.innerText = "👑🔥";
-      streakVal.className = "text-xl sm:text-2xl font-black text-red-400 mt-1";
-      streakRank.innerText = `DISCORD ZÁVISLÁK (${streak} DNÍ!)`;
-      streakRank.className = "text-[10px] font-black mt-1 uppercase tracking-wider text-red-400 animate-pulse";
-      streakCard.className += " border-red-500/80 bg-red-950/30 animate-fire-glow";
+      const streakCard = document.getElementById("streakCard");
+      const streakIcon = document.getElementById("streakIcon");
+      const streakVal = document.getElementById("statStreak");
+      const streakRank = document.getElementById("streakRank");
+
+      const calendarCard = document.getElementById("calendarCard");
+      const todayCard = document.getElementById("todayCard");
+
+      // Reset tříd
+      streakCard.className = "border rounded-xl p-3.5 text-center transition-all duration-500";
+      streakIcon.className = "text-xl inline-block transition-transform";
+      title.className = "text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight transition-all duration-500";
+
+      streakVal.innerText = streak;
+
+      if (streak === 0) {
+        body.style.background = "radial-gradient(ellipse at top, #0f172a 0%, #080b11 100%)";
+        badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-cyan-950/40 text-cyan-400 border-cyan-800/40";
+        title.className += " text-slate-300";
+        sub.innerText = "Stav klinické smrti. Tomík je nezvěstný.";
+
+        streakCard.className += " bg-slate-900/80 border-cyan-900/40";
+        streakIcon.innerText = "❄️";
+        streakVal.className = "text-xl sm:text-2xl font-black text-cyan-400 mt-1";
+        streakRank.innerText = "Žádná série - Klasika";
+        streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-cyan-400/80";
+
+        calendarCard.style.borderColor = "#1e293b";
+        todayCard.style.borderColor = "#1e293b";
+
+      } else if (streak === 1) {
+        body.style.background = "radial-gradient(ellipse at top, #0d1620 0%, #090c12 100%)";
+        badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-emerald-950/40 text-emerald-400 border-emerald-800/40";
+        title.className += " text-white";
+        sub.innerText = "Zázraky se dějí, ale zítra už nepřijde.";
+
+        streakCard.className += " bg-cardbg border-cardborder";
+        streakIcon.innerText = "🙄";
+        streakVal.className = "text-xl sm:text-2xl font-black text-emerald-400 mt-1";
+        streakRank.innerText = "Náhoda (1 den)";
+        streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-emerald-500";
+
+        calendarCard.style.borderColor = "#262b3d";
+        todayCard.style.borderColor = "#262b3d";
+
+      } else if (streak === 2) {
+        body.style.background = "radial-gradient(ellipse at top, #1e1b0d 0%, #0d0f14 100%)";
+        badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-amber-950/60 text-amber-300 border-amber-600/50";
+        title.className += " text-amber-100";
+        sub.innerText = "Něco je špatně... Dva dny po sobě?";
+
+        streakCard.className += " bg-amber-950/30 border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.15)]";
+        streakIcon.innerText = "⚡";
+        streakVal.className = "text-xl sm:text-2xl font-black text-amber-400 mt-1";
+        streakRank.innerText = "Rozjezd (2 dny)";
+        streakRank.className = "text-[10px] font-bold mt-1 uppercase tracking-wider text-amber-400";
+
+        calendarCard.style.borderColor = "rgba(245, 158, 11, 0.25)";
+        todayCard.style.borderColor = "rgba(245, 158, 11, 0.25)";
+
+      } else if (streak >= 3 && streak < 5) {
+        body.style.background = "radial-gradient(ellipse at top, #291207 0%, #0d090d 100%)";
+        badge.className = "text-[11px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full border bg-orange-950 text-orange-400 border-orange-500";
+        title.className += " text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400";
+        sub.innerText = "Tady něco nehraje. Buď dostal kopačky, nebo marodí.";
+
+        streakCard.className += " bg-orange-950/40 border-orange-500/60 shadow-[0_0_30px_rgba(249,115,22,0.3)]";
+        streakIcon.innerText = "🔥";
+        streakIcon.className += " animate-bounce";
+        streakVal.className = "text-xl sm:text-2xl font-black text-orange-400 mt-1";
+        streakRank.innerText = `On Fire (${streak} dny!)`;
+        streakRank.className = "text-[10px] font-extrabold mt-1 uppercase tracking-wider text-orange-400";
+
+        calendarCard.style.borderColor = "rgba(249, 115, 22, 0.4)";
+        todayCard.style.borderColor = "rgba(249, 115, 22, 0.4)";
+
+      } else {
+        body.style.background = "radial-gradient(ellipse at top, #3b0a0a 0%, #100404 100%)";
+        badge.className = "text-[11px] uppercase tracking-widest font-black px-3.5 py-1 rounded-full border bg-red-900 text-red-100 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.7)] animate-pulse";
+        title.className += " text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-300 to-amber-200 drop-shadow-[0_4px_10px_rgba(239,68,68,0.5)]";
+        sub.innerText = "⚠️ KRITICKÝ STAV: Realita byla opuštěna, Tomík je permanentně online.";
+
+        streakCard.className += " bg-red-950/60 border-red-500/90 animate-fire-glow";
+        streakIcon.innerText = "👑🔥";
+        streakVal.className = "text-xl sm:text-2xl font-black text-red-400 mt-1";
+        streakRank.innerText = `DISCORD ZÁVISLÁK (${streak} DNÍ!)`;
+        streakRank.className = "text-[10px] font-black mt-1 uppercase tracking-wider text-red-300 animate-pulse";
+
+        calendarCard.style.borderColor = "rgba(239, 68, 68, 0.6)";
+        todayCard.style.borderColor = "rgba(239, 68, 68, 0.6)";
+      }
     }
 
-    // Dnes
+    // Aplikace vzhledu
+    applyStreakTheme(streak);
+
+    // Dnes (14. 9. 2026)
     const todayStr = "2026-09-14";
     document.getElementById("todayDate").innerText = todayStr;
     const todayLog = logsMap.get(todayStr);
@@ -240,19 +306,19 @@
       const log = logsMap.get(dateStr);
 
       const cell = document.createElement("div");
-      cell.className = "min-h-[92px] rounded-xl border p-2 flex flex-col justify-between transition-all select-none";
+      cell.className = "min-h-[92px] rounded-xl border p-2 flex flex-col justify-between transition-all select-none backdrop-blur-sm";
 
       if (!log) {
-        cell.className += " bg-slate-900/40 border-slate-800 text-slate-600";
+        cell.className += " bg-slate-900/40 border-slate-800/80 text-slate-600";
         cell.innerHTML = `
           <span class="text-xs font-bold">${day}</span>
           <span class="text-xs text-slate-700 text-center pb-2">–</span>
         `;
       } else if (log.online) {
-        cell.className += " bg-emerald-950/20 border-emerald-600/40 text-emerald-300";
+        cell.className += " bg-emerald-950/30 border-emerald-600/50 text-emerald-300";
         cell.innerHTML = `
           <div class="flex justify-between items-start">
-            <span class="text-xs font-bold text-slate-400">${day}</span>
+            <span class="text-xs font-bold text-slate-300">${day}</span>
             <span class="text-emerald-400 font-extrabold text-sm leading-none">✓</span>
           </div>
           <span class="text-[11px] text-emerald-300/90 font-medium leading-snug break-words mt-1">
@@ -260,10 +326,10 @@
           </span>
         `;
       } else {
-        cell.className += " bg-rose-950/20 border-rose-600/40 text-rose-300";
+        cell.className += " bg-rose-950/30 border-rose-600/50 text-rose-300";
         cell.innerHTML = `
           <div class="flex justify-between items-start">
-            <span class="text-xs font-bold text-slate-400">${day}</span>
+            <span class="text-xs font-bold text-slate-300">${day}</span>
             <span class="text-rose-400 font-extrabold text-sm leading-none">✗</span>
           </div>
           <span class="text-[11px] text-rose-300/90 font-medium leading-snug break-words mt-1">
